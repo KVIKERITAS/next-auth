@@ -37,12 +37,21 @@ export const {
 		},
 	},
 	callbacks: {
-		async signIn({ user }) {
+		async signIn({ user, account }) {
+			// Allow only role "ADMIN" to login
 			// const existingUser = await getUserById(user.id)
 
 			// if (!existingUser || existingUser.role === 'USER') {
 			// 	return false
 			// }
+
+			// Allow OAuth without email verification
+			if (account?.provider !== 'credentials') return true
+
+			const existingUser = await getUserById(user.id)
+
+			// Allow only email verified users to login
+			if (!existingUser?.emailVerified) return false
 
 			return true
 		},
