@@ -5,6 +5,7 @@ import { getUserById } from '@/data/user'
 import { db } from '@/lib/db'
 
 import authConfig from '@/auth.config'
+import { getTwoFactorConfirmationByUserId } from '@/data/two_factor_confirmation'
 
 type TUserRole = 'ADMIN' | 'USER'
 
@@ -52,6 +53,19 @@ export const {
 
 			// Allow only email verified users to login
 			if (!existingUser?.emailVerified) return false
+
+			// Enable 2FA authentication
+			if (existingUser.isTwoFactorEnabled) {
+				const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+					existingUser.id,
+				)
+
+				if (!twoFactorConfirmation) return false
+
+				await db.twoFactorConfirmation.delete({
+					where: { id: twoFactorConfirmation.id },
+				})
+			}
 
 			return true
 		},
