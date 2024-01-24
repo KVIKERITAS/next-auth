@@ -15,6 +15,10 @@ declare module 'next-auth' {
 			id: string
 			role: 'ADMIN' | 'USER'
 			username: string
+			image: string
+			name: string
+			email: string
+			isTwoFactorEnabled: boolean
 		}
 	}
 }
@@ -77,7 +81,14 @@ export const {
 
 			if (token.role && session.user) {
 				session.user.role = token.role as TUserRole
+			}
+
+			if (session.user) {
 				session.user.username = token.username as string
+			}
+
+			if (session.user) {
+				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean
 			}
 
 			return session
@@ -90,6 +101,7 @@ export const {
 
 			token.username = existingUser.username
 			token.role = existingUser.role
+			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled
 
 			return token
 		},
