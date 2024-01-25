@@ -20,7 +20,7 @@ export const UserInfo = ({ user, label }: TUserInfoProps) => {
 	return (
 		<Card className='w-[600px] shadow-md'>
 			<CardHeader>
-				<p className='2xl font-semibold text-center'>{label}</p>
+				<p className='text-2xl font-semibold text-center'>{label}</p>
 			</CardHeader>
 			<CardContent className='space-y-4'>
 				<div className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
